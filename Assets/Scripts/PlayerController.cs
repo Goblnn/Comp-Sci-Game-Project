@@ -23,9 +23,9 @@ public class PlayerController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                targetPos.z = transform.position.z;
                 targetPos.y += 0.375f;
             }
+            targetPos.z = -1;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
         }
     }
