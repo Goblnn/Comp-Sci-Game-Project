@@ -35,7 +35,7 @@ public class CameraController : MonoBehaviour
             targetPos = player.transform.position;
             targetPos.z = -30;
 
-            moveSpeed = 15;
+            moveSpeed = 20;
 
             isCentering = true;
         }
