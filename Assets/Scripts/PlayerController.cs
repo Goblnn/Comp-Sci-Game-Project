@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,7 +7,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public new CameraController camera;
     private Animator animator;
 
     public float moveSpeed = 5;
@@ -17,47 +17,32 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        animator.SetFloat("moveY", -1);
     }
 
     private void Update()
     {
-        if (camera.camIsCentering() == false)
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
+
+        if (input != Vector2.zero)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Math.Abs(input.x) == 1 && Math.Abs(input.y) == 1)
             {
-                targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                targetPos.y += 0.375f;
-
-                setAnimationAngle();
+                animator.SetFloat("moveX", input.x);
+                animator.SetFloat("moveY", 0);
             }
-            targetPos.z = -1;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-        }
-    }
-
-    private void setAnimationAngle()
-    {
-        if(transform.position.x > targetPos.x)
-        {
-            double xDirection = -1;
-        }
-        else
-        {
-            double xDirection = 1;
+            else
+            {
+                animator.SetFloat("moveX", input.x);
+                animator.SetFloat("moveY", input.y);
+            }
         }
 
-        if (transform.position.y > targetPos.y)
-        {
-            double yDirection = -1;
-        }
-        else
-        {
-            double yDirection = 1;
-        }
+        targetPos = transform.position;
+        targetPos.x += input.x;
+        targetPos.y += input.y;
 
-        double ChangeInX = Math.Abs(targetPos.x - transform.position.x);
-        double ChangeInY = Math.Abs(targetPos.y - transform.position.y);
-
-
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
     }
 }
