@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     public float moveSpeed = 5;
 
+    public bool isMoving;
+
     public Vector3 targetPos;
     public Vector2 input;
 
@@ -21,8 +23,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update()
-    {
-        input.x = Input.GetAxisRaw("Horizontal");
+    {        input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
         if (input != Vector2.zero)
@@ -37,6 +38,12 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat("moveX", input.x);
                 animator.SetFloat("moveY", input.y);
             }
+
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
         }
 
         targetPos = transform.position;
@@ -44,5 +51,7 @@ public class PlayerController : MonoBehaviour
         targetPos.y += input.y;
 
         transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+
+        animator.SetBool("isMoving", isMoving);
     }
 }
